@@ -1,3 +1,163 @@
 @use "./variables.scss" as *;
 
 // put your custom CSS here!
+// Target the main page title
+.article-title::before {
+  content: "❯ ";
+  color: var(--secondary); /* The Tokyonight purple */
+  font-family: "JetBrains Mono", monospace;
+  margin-right: 0.2rem;
+}
+
+// Target the markdown headers within the page content
+article {
+  h1::before,
+  h2::before,
+  h3::before {
+    content: "$ ";
+    color: var(--tertiary); /* The Tokyonight cyan */
+    font-family: "JetBrains Mono", monospace;
+    font-weight: bold;
+    margin-right: 0.25rem;
+    opacity: 0.8;
+  }
+  
+  // Optional: Make h3 a different prompt like a blinking cursor block
+  h3::before {
+    content: "█ ";
+    color: var(--dark); /* Tokyonight blue */
+    font-size: 0.8em;
+  }
+}
+
+// Remove rounding for a sharper, tiling-wm feel
+* {
+  --radius: 0px !important;
+}
+
+// Add a subtle neon glow to links on hover
+a {
+  transition: all 0.2s ease;
+  &:hover {
+    text-shadow: 0 0 8px rgba(187, 154, 247, 0.5); // Tokyonight purple glow
+  }
+}
+
+// Make the link-preview popovers look like floating terminal windows
+.popover {
+  border: 1px solid var(--secondary);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 10px rgba(187, 154, 247, 0.1);
+  background-color: var(--light);
+}
+
+// Style inline code blocks to stand out clearly
+code {
+  background-color: var(--lightgray);
+  border: 1px solid var(--gray);
+  padding: 0.1rem 0.3rem;
+}
+
+/* Add a blinking block cursor to the main title */
+.article-title::after {
+  content: "█";
+  color: var(--secondary);
+  animation: blink 1.2s step-end infinite;
+  margin-left: 0.4rem;
+  font-size: 0.8em;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Tiling window manager focus borders */
+.explorer, .graph {
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  padding: 0.5rem; 
+  
+  &:hover {
+    border: 1px solid var(--tertiary); /* Tokyonight cyan border */
+    box-shadow: 0 0 15px rgba(125, 207, 255, 0.15); /* Subtle neon glow */
+    background-color: rgba(41, 46, 66, 0.3); /* Slight background shift */
+  }
+}
+
+/* Neovim status-line style tags */
+.tags {
+  li {
+    border-radius: 0 !important;
+    background-color: var(--lightgray);
+    border-left: 3px solid var(--secondary);
+    font-family: "JetBrains Mono", monospace;
+    text-transform: lowercase;
+    padding: 0.2rem 0.6rem;
+    
+    /* Make the hover state pop like a terminal selection */
+    &:hover {
+      background-color: var(--highlight);
+      border-left-color: var(--tertiary);
+    }
+  }
+}
+/* Create floating terminal windows with gaps */
+.page {
+  gap: 2rem; /* The "gaps in" between your windows */
+  padding: 2rem; /* The "gaps out" from the screen edge */
+}
+
+/* Apply the dark background only to the distinct windows */
+.page > .left,
+.page > .center,
+.page > .right {
+  background-color: var(--light); 
+  border: 1px solid var(--lightgray);
+  padding: 1.5rem;
+  height: fit-content;
+}
+
+/* Change the main body background to a slightly darker shade to emphasize the floating panes */
+body {
+  background-color: #16161e; /* Tokyonight completely dark background */
+}
+
+/* =========================================
+   Light Mode Overrides
+   ========================================= */
+html[saved-theme="light"] {
+  
+  /* 1. Kill the neon text glow on links */
+  a:hover {
+    text-shadow: none;
+    text-decoration: underline;
+    text-decoration-color: var(--tertiary);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+  }
+
+  /* 2. Swap the soft neon popover shadow for a hard tiling-wm shadow */
+  .popover {
+    box-shadow: 6px 6px 0px var(--lightgray);
+    border: 2px solid var(--gray);
+  }
+
+  /* 3. Fix the tiling window hover effect (No glowing borders) */
+  .explorer, .graph {
+    &:hover {
+      border: 1px solid var(--gray);
+      box-shadow: 4px 4px 0px var(--lightgray);
+      background-color: var(--light);
+    }
+  }
+
+  /* 4. Increase contrast on the code block title bar */
+  pre::before {
+    background-color: #d8dadd;
+    border-bottom: 1px solid var(--gray);
+  } 
+  
+  body {
+    background-color: #d4d5d9; 
+  }
+}
